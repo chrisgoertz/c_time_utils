@@ -391,7 +391,7 @@ uint8_t time_util_get_milliseconds(TIME_UTIL_t *time)
  *
  * @param time: TIME_UTIL_t* time struct.
  * @param d: uint8_t the new day value.
- * @return uint8_t
+ * @return TIME_UTIL_Error_t
  */
 TIME_UTIL_Error_t time_util_set_days(TIME_UTIL_t *time, uint8_t d)
 {
@@ -405,13 +405,40 @@ TIME_UTIL_Error_t time_util_set_days(TIME_UTIL_t *time, uint8_t d)
  *
  * @param time: TIME_UTIL_t* time struct
  * @param h: uint8_t the new hour value.
- * @return uint8_t
+ * @return TIME_UTIL_Error_t
  */
 TIME_UTIL_Error_t time_util_set_hours(TIME_UTIL_t *time, uint8_t h)
 {
     FAIL_IF_NULL(time);
-    // FAIL_IF(h > TIME_UTILS_HOURS_MAX);
     FAIL_IF_RETURN(h > TIME_UTILS_HOURS_MAX, TIME_UTIL_ARGUMENT_INVALID_ERROR);
     time->hours = h;
     return TIME_UTIL_OK;
 }
+/**
+ * @brief Set the minutes in time struct.
+ * 
+ * @param time: TIME_UTIL_t* time struct
+ * @param m: uint8_t the minutes value.
+ * @return TIME_UTIL_Error_t 
+ */
+TIME_UTIL_Error_t time_util_set_minutes(TIME_UTIL_t *time, uint8_t m){
+    FAIL_IF_NULL(time);
+    FAIL_IF_RETURN(m > TIME_UTILS_MINUTES_MAX, TIME_UTIL_ARGUMENT_INVALID_ERROR);
+    time->minutes = m;
+    return TIME_UTIL_OK;
+}
+
+/**
+ * @brief Set the seconds in time struct.
+ * 
+ * @param time: TIME_UTIL_t* time struct
+ * @param s: uint8_t the minutes value.
+ * @return TIME_UTIL_Error_t 
+ */
+TIME_UTIL_Error_t time_util_set_seconds(TIME_UTIL_t *time, uint8_t s){
+    FAIL_IF_NULL(time);
+    FAIL_IF_RETURN(s > TIME_UTILS_SECONDS_MAX, TIME_UTIL_ARGUMENT_INVALID_ERROR);
+    time->seconds = s;
+    return TIME_UTIL_OK;
+}
+

@@ -72,6 +72,8 @@ extern "C"
     /* SETTERS */
     TIME_UTIL_Error_t time_util_set_days(TIME_UTIL_t *time, uint8_t d);
     TIME_UTIL_Error_t time_util_set_hours(TIME_UTIL_t *time, uint8_t h);
+    TIME_UTIL_Error_t time_util_set_minutes(TIME_UTIL_t *time, uint8_t m);
+    TIME_UTIL_Error_t time_util_set_seconds(TIME_UTIL_t *time, uint8_t s);
 
 #ifdef __cpluplus
 }
