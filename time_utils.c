@@ -14,7 +14,12 @@
 //#include <string.h>
 #include <stdio.h>
 
+// useful macros
+
 #define FAIL_IF(EXP) ({if(EXP){return TIME_UTIL_ERROR;}})
+// Test arguments for NULL pointer
+#define FAIL_IF_NULL(ARG) ({if(NULL == ARG){return TIME_UTIL_ARGUMENT_NULL_ERROR;}})
+
 //###################################################################
 /**
  * @brief Initialize the time stuct.
@@ -23,7 +28,7 @@
  * @return TIME_UTIL_Error_t
  */
 TIME_UTIL_Error_t time_util_init(TIME_UTIL_t* time){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
 
     time->days = TIME_UTILS_MIN;
     time->hours = TIME_UTILS_MIN;
@@ -41,7 +46,7 @@ TIME_UTIL_Error_t time_util_init(TIME_UTIL_t* time){
  * @return TIME_UTIL_Error_t
  */
 TIME_UTIL_Error_t time_util_increment_days(TIME_UTIL_t* time){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
 
     time->days++;
     return TIME_UTIL_OK;
@@ -56,7 +61,7 @@ TIME_UTIL_Error_t time_util_increment_days(TIME_UTIL_t* time){
  */
 TIME_UTIL_Error_t time_util_decrement_days(TIME_UTIL_t* time){
     /* check if timestruct is valid */
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
 
     /* check if days is gt 0*/
     FAIL_IF(time->days <= 0);
@@ -73,7 +78,7 @@ TIME_UTIL_Error_t time_util_decrement_days(TIME_UTIL_t* time){
  * @return TIME_UTIL_Error_t
  */
 TIME_UTIL_Error_t time_util_increment_hours(TIME_UTIL_t* time){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
 
     if(time->hours < TIME_UTILS_HOURS_MAX){
         time->hours++;
@@ -93,7 +98,7 @@ TIME_UTIL_Error_t time_util_increment_hours(TIME_UTIL_t* time){
  */
 TIME_UTIL_Error_t time_util_decrement_hours(TIME_UTIL_t* time){
     /* chekc if time struct is valid */
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
 
     if(time->hours <= TIME_UTILS_MIN){
         time->hours = 23;
@@ -113,7 +118,7 @@ TIME_UTIL_Error_t time_util_decrement_hours(TIME_UTIL_t* time){
  * @return TIME_UTIL_Error_t
  */
 TIME_UTIL_Error_t time_util_increment_minutes(TIME_UTIL_t* time){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
 
     if(time->minutes < TIME_UTILS_MINUTES_MAX){
         time->minutes++;
@@ -131,7 +136,7 @@ TIME_UTIL_Error_t time_util_increment_minutes(TIME_UTIL_t* time){
  * @return TIME_UTIL_Error_t
  */
 TIME_UTIL_Error_t time_util_decrement_minutes(TIME_UTIL_t* time){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
 
     if(time->minutes <= TIME_UTILS_MIN){
         time->minutes = 59;
@@ -150,7 +155,7 @@ TIME_UTIL_Error_t time_util_decrement_minutes(TIME_UTIL_t* time){
  * @return TIME_UTIL_Error_t
  */
 TIME_UTIL_Error_t time_util_increment_seconds(TIME_UTIL_t* time){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
 
     if(time->seconds < TIME_UTILS_SECONDS_MAX){
         time->seconds++;
@@ -169,7 +174,7 @@ TIME_UTIL_Error_t time_util_increment_seconds(TIME_UTIL_t* time){
  * @return TIME_UTIL_Error_t
  */
 TIME_UTIL_Error_t time_util_decrement_seconds(TIME_UTIL_t* time){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
 
     if(time->seconds < TIME_UTILS_MIN){
         time->seconds = 59;
@@ -188,7 +193,7 @@ TIME_UTIL_Error_t time_util_decrement_seconds(TIME_UTIL_t* time){
  * @return TIME_UTIL_Error_t
  */
 TIME_UTIL_Error_t time_util_increment_milliseconds(TIME_UTIL_t* time){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(NULL == time);
 
     if(time->milliseconds < TIME_UTILS_MILLISECONDS_MAX){
         time->milliseconds++;
@@ -210,7 +215,7 @@ TIME_UTIL_Error_t time_util_increment_milliseconds(TIME_UTIL_t* time){
  * @return TIME_UTIL_Error_t 
  */
 TIME_UTIL_Error_t time_util_timeToString(TIME_UTIL_t* time, char* destination, uint32_t destination_len){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
     //calculate length of possible string
     uint32_t string_length = 13;
     if(time->days >=10000) string_length++;
@@ -243,7 +248,7 @@ TIME_UTIL_Error_t time_util_timeToString(TIME_UTIL_t* time, char* destination, u
  * @return TIME_UTIL_Error_t 
  */
 TIME_UTIL_Error_t time_util_shortTimeToString(TIME_UTIL_t* time, char* destination, uint32_t destination_len){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
     const uint32_t string_length = 8;
     // test, if string fits into destination.
     FAIL_IF((string_length +1) >= destination_len);
@@ -264,7 +269,7 @@ TIME_UTIL_Error_t time_util_shortTimeToString(TIME_UTIL_t* time, char* destinati
  * @return TIME_UTIL_Error_t 
  */
 TIME_UTIL_Error_t time_util_fromMilliSeconds(TIME_UTIL_t* time, uint32_t ms){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
 
     time->milliseconds = ms % 1000; // 23450 % 1000 = 0
     uint32_t rest = ms / 1000; // 23450
@@ -285,7 +290,7 @@ TIME_UTIL_Error_t time_util_fromMilliSeconds(TIME_UTIL_t* time, uint32_t ms){
  * @return uint8_t
  */
 uint8_t time_util_get_days(TIME_UTIL_t* time){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
 
     return time->days;
 }
@@ -297,7 +302,7 @@ uint8_t time_util_get_days(TIME_UTIL_t* time){
  * @return uint8_t
  */
 uint8_t time_util_get_hours(TIME_UTIL_t* time){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
 
     return time->hours;
 }
@@ -309,7 +314,7 @@ uint8_t time_util_get_hours(TIME_UTIL_t* time){
  * @return uint8_t
  */
 uint8_t time_util_get_minutes(TIME_UTIL_t* time){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
 
     return time->minutes;
 }
@@ -321,7 +326,7 @@ uint8_t time_util_get_minutes(TIME_UTIL_t* time){
  * @return uint8_t 
  */
 uint8_t time_util_get_seconds(TIME_UTIL_t* time){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULl(time);
 
     return time->seconds;
 }
@@ -333,7 +338,7 @@ uint8_t time_util_get_seconds(TIME_UTIL_t* time){
  * @return uint8_t 
  */
 uint8_t time_util_get_milliseconds(TIME_UTIL_t* time){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
 
     return time->milliseconds;
 }
@@ -345,7 +350,7 @@ uint8_t time_util_get_milliseconds(TIME_UTIL_t* time){
  * @return uint8_t 
  */
 TIME_UTIL_Error_t time_util_set_days(TIME_UTIL_t* time, uint8_t d){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
     time->days = d;
     return TIME_UTIL_OK;
 }
@@ -358,7 +363,7 @@ TIME_UTIL_Error_t time_util_set_days(TIME_UTIL_t* time, uint8_t d){
  * @return uint8_t 
  */
 TIME_UTIL_Error_t time_util_set_hours(TIME_UTIL_t* time, uint8_t h){
-    FAIL_IF(NULL == time);
+    FAIL_IF_NULL(time);
     FAIL_IF(h > TIME_UTILS_HOURS_MAX);
 
     time->hours = h;

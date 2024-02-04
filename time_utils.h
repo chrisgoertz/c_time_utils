@@ -27,7 +27,9 @@ extern "C"{
  */
 typedef enum{
     TIME_UTIL_OK = 0x00,            // no error.
-    TIME_UTIL_ERROR = 0x01,         // Generic error.
+    TIME_UTIL_ERROR,                // Generic error.
+    TIME_UTIL_ARGUMENT_NULL_ERROR,  // passed argument is null.
+    TIME_UTIL_ERROR_ENUM_MAX,       // max value in enumeration
 }TIME_UTIL_Error_t;
 
 typedef struct{
