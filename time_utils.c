@@ -380,7 +380,7 @@ uint8_t time_util_get_seconds(TIME_UTIL_t *time)
  * @param time: TIME_UTIL_t*
  * @return uint8_t
  */
-uint8_t time_util_get_milliseconds(TIME_UTIL_t *time)
+uint16_t time_util_get_milliseconds(TIME_UTIL_t *time)
 {
     FAIL_IF_NULL(time);
 
@@ -442,3 +442,16 @@ TIME_UTIL_Error_t time_util_set_seconds(TIME_UTIL_t *time, uint8_t s){
     return TIME_UTIL_OK;
 }
 
+/**
+ * @brief Set the milliseconds in time struct
+ * 
+ * @param time: TIME_UTIL_t* time struct
+ * @param ms: uint16_t the milliseconds value.
+ * @return TIME_UTIL_Error_t 
+ */
+TIME_UTIL_Error_t time_util_set_milliseconds(TIME_UTIL_t *time, uint16_t ms){
+    FAIL_IF(time);
+    FAIL_IF_RETURN(ms > TIME_UTILS_MILLISECONDS_MAX, TIME_UTIL_ARGUMENT_INVALID_ERROR);
+    time->milliseconds = ms;
+    return TIME_UTIL_OK;
+}
