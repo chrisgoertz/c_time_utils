@@ -17,6 +17,7 @@
 // useful macros
 
 #define FAIL_IF(EXP) ({if(EXP){return TIME_UTIL_ERROR;}})
+#define FAIL_IF_RETURN(EXP,RET) ({if(EXP){return RET;}})
 // Test arguments for NULL pointer
 #define FAIL_IF_NULL(ARG) ({if(NULL == ARG){return TIME_UTIL_ARGUMENT_NULL_ERROR;}})
 
@@ -63,8 +64,8 @@ TIME_UTIL_Error_t time_util_decrement_days(TIME_UTIL_t* time){
     /* check if timestruct is valid */
     FAIL_IF_NULL(time);
 
-    /* check if days is gt 0*/
-    FAIL_IF(time->days <= 0);
+    /* check if days is eq 0*/
+    FAIL_IF_RETURN(time->days == 0, TIME_UTIL_ERROR);
 
     time->days--;
     return TIME_UTIL_OK;
@@ -80,12 +81,15 @@ TIME_UTIL_Error_t time_util_decrement_days(TIME_UTIL_t* time){
 TIME_UTIL_Error_t time_util_increment_hours(TIME_UTIL_t* time){
     FAIL_IF_NULL(time);
 
-    if(time->hours < TIME_UTILS_HOURS_MAX){
+    if(time->hours < TIME_UTILS_HOURS_MAX)
+    {
         time->hours++;
-        return TIME_UTIL_OK;
     }
-    time->hours = TIME_UTILS_MIN;
-    time_util_increment_days(time);
+    else
+    {
+        time->hours = TIME_UTILS_MIN;
+        time_util_increment_days(time);
+    }
     return TIME_UTIL_OK;
 }
 
@@ -100,13 +104,15 @@ TIME_UTIL_Error_t time_util_decrement_hours(TIME_UTIL_t* time){
     /* chekc if time struct is valid */
     FAIL_IF_NULL(time);
 
-    if(time->hours <= TIME_UTILS_MIN){
+    if(time->hours <= TIME_UTILS_MIN)
+    {
         time->hours = 23;
         time_util_decrement_days(time);
-        return TIME_UTIL_OK;
     }
-    time->hours--;
-    
+    else
+    {
+        time->hours--;
+    }
     return TIME_UTIL_OK;
 }
 
@@ -120,12 +126,15 @@ TIME_UTIL_Error_t time_util_decrement_hours(TIME_UTIL_t* time){
 TIME_UTIL_Error_t time_util_increment_minutes(TIME_UTIL_t* time){
     FAIL_IF_NULL(time);
 
-    if(time->minutes < TIME_UTILS_MINUTES_MAX){
+    if(time->minutes < TIME_UTILS_MINUTES_MAX)
+    {
         time->minutes++;
-        return TIME_UTIL_OK;
     }
-    time->minutes = TIME_UTILS_MIN;
-    time_util_increment_hours(time);
+    else
+    {
+        time->minutes = TIME_UTILS_MIN;
+        time_util_increment_hours(time);
+    }
     return TIME_UTIL_OK;
 }
 //###################################################################
@@ -138,12 +147,15 @@ TIME_UTIL_Error_t time_util_increment_minutes(TIME_UTIL_t* time){
 TIME_UTIL_Error_t time_util_decrement_minutes(TIME_UTIL_t* time){
     FAIL_IF_NULL(time);
 
-    if(time->minutes <= TIME_UTILS_MIN){
+    if(time->minutes <= TIME_UTILS_MIN)
+    {
         time->minutes = 59;
         time_util_decrement_hours(time);
-        return TIME_UTIL_OK;
     }
+    else
+    {
     time->minutes--;
+    }
     return TIME_UTIL_OK;
 }
 
@@ -159,10 +171,12 @@ TIME_UTIL_Error_t time_util_increment_seconds(TIME_UTIL_t* time){
 
     if(time->seconds < TIME_UTILS_SECONDS_MAX){
         time->seconds++;
-        return TIME_UTIL_OK;
     }
-    time->seconds = TIME_UTILS_MIN;
-    time_util_increment_minutes(time);
+    else
+    {
+        time->seconds = TIME_UTILS_MIN;
+        time_util_increment_minutes(time);
+    }
     return TIME_UTIL_OK;
 }
 
@@ -176,12 +190,15 @@ TIME_UTIL_Error_t time_util_increment_seconds(TIME_UTIL_t* time){
 TIME_UTIL_Error_t time_util_decrement_seconds(TIME_UTIL_t* time){
     FAIL_IF_NULL(time);
 
-    if(time->seconds < TIME_UTILS_MIN){
+    if(time->seconds < TIME_UTILS_MIN)
+    {
         time->seconds = 59;
         time_util_decrement_minutes(time);
-        return TIME_UTIL_OK;
     }
-    time->seconds--;
+    else
+    {
+        time->seconds--;
+    }
     return TIME_UTIL_OK;
 }
 
@@ -193,14 +210,17 @@ TIME_UTIL_Error_t time_util_decrement_seconds(TIME_UTIL_t* time){
  * @return TIME_UTIL_Error_t
  */
 TIME_UTIL_Error_t time_util_increment_milliseconds(TIME_UTIL_t* time){
-    FAIL_IF_NULL(NULL == time);
+    FAIL_IF_NULL(time);
 
-    if(time->milliseconds < TIME_UTILS_MILLISECONDS_MAX){
+    if(time->milliseconds < TIME_UTILS_MILLISECONDS_MAX)
+    {
         time->milliseconds++;
-        return TIME_UTIL_OK;
     }
-    time->milliseconds = TIME_UTILS_MIN;
-    time_util_increment_seconds(time);
+    else
+    {
+        time->milliseconds = TIME_UTILS_MIN;
+        time_util_increment_seconds(time);
+    }
     return TIME_UTIL_OK;
 }
 
@@ -326,7 +346,7 @@ uint8_t time_util_get_minutes(TIME_UTIL_t* time){
  * @return uint8_t 
  */
 uint8_t time_util_get_seconds(TIME_UTIL_t* time){
-    FAIL_IF_NULl(time);
+    FAIL_IF_NULL(time);
 
     return time->seconds;
 }
@@ -364,8 +384,8 @@ TIME_UTIL_Error_t time_util_set_days(TIME_UTIL_t* time, uint8_t d){
  */
 TIME_UTIL_Error_t time_util_set_hours(TIME_UTIL_t* time, uint8_t h){
     FAIL_IF_NULL(time);
-    FAIL_IF(h > TIME_UTILS_HOURS_MAX);
-
+    //FAIL_IF(h > TIME_UTILS_HOURS_MAX);
+    FAIL_IF_RETURN(h>TIME_UTILS_HOURS_MAX, TIME_UTIL_ARGUMENT_INVALID_ERROR);
     time->hours = h;
     return TIME_UTIL_OK;
 }
