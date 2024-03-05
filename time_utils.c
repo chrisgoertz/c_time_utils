@@ -76,9 +76,25 @@ TIME_UTIL_Error_t time_util_decrement_days(TIME_UTIL_t *time)
 
 // ###################################################################
 /**
+ * @brief add amount to days 
+ * 
+ * @param time: TIME_UTIL_t
+ * @param amount: uint32_t
+ * @return TIME_UTIL_Error_t 
+ */
+TIME_UTIL_Error_t time_util_add_days(TIME_UTIL_t *time, uint32_t amount){
+
+    /* check if timestruct is valid */
+    FAIL_IF_NULL(time);
+    time->days += amount;
+    return TIME_UTIL_OK;
+}
+
+// ###################################################################
+/**
  * @brief Increment hours.
  *
- * @param time: TIME_UTILS_t*
+ * @param time: TIME_UTIL_t*
  * @return TIME_UTIL_Error_t
  */
 TIME_UTIL_Error_t time_util_increment_hours(TIME_UTIL_t *time)
@@ -106,7 +122,7 @@ TIME_UTIL_Error_t time_util_increment_hours(TIME_UTIL_t *time)
  */
 TIME_UTIL_Error_t time_util_decrement_hours(TIME_UTIL_t *time)
 {
-    /* chekc if time struct is valid */
+    /* check if time struct is valid */
     FAIL_IF_NULL(time);
 
     if (time->hours <= TIME_UTILS_MIN)
@@ -117,6 +133,35 @@ TIME_UTIL_Error_t time_util_decrement_hours(TIME_UTIL_t *time)
     else
     {
         time->hours--;
+    }
+    return TIME_UTIL_OK;
+}
+
+// ###################################################################
+/**
+ * @brief Add amount to hours
+ * 
+ * @param time: TIME_UTIL_t
+ * @param hours: uint32_t
+ * @return TIME_UTIL_Error_t 
+ */
+TIME_UTIL_Error_t time_util_add_hours(TIME_UTIL_t *time, uint32_t hours)
+{
+    /* check if time struct is valid */
+    FAIL_IF_NULL(time);
+    
+    // add remainder from division by HOURS_MAX to days
+    uint32_t add_days = hours % TIME_UTILS_HOURS_MAX+1;
+    time_util_add_days(time, add_days);
+    
+    // add hours
+    uint32_t add_hours = hours / TIME_UTILS_HOURS_MAX+1;
+    time->hours += add_hours;
+    
+    // if hours theoretically overflows, correct value
+    if(time->hours > TIME_UTILS_HOURS_MAX){
+        time_util_increment_days(time);
+        time->hours -= 24;
     }
     return TIME_UTIL_OK;
 }

@@ -49,13 +49,16 @@ extern "C"
     /* time arithmetics */
     TIME_UTIL_Error_t time_util_increment_days(TIME_UTIL_t *time);
     TIME_UTIL_Error_t time_util_decrement_days(TIME_UTIL_t *time);
+    TIME_UTIL_Error_t time_util_add_days(TIME_UTIL_t *time, uint32_t amount);
     TIME_UTIL_Error_t time_util_increment_hours(TIME_UTIL_t *time);
     TIME_UTIL_Error_t time_util_decrement_hours(TIME_UTIL_t *time);
+    TIME_UTIL_Error_t time_util_add_hours(TIME_UTIL_t *time, uint32_t hours);
     TIME_UTIL_Error_t time_util_increment_minutes(TIME_UTIL_t *time);
     TIME_UTIL_Error_t time_util_decrement_minutes(TIME_UTIL_t *time);
     TIME_UTIL_Error_t time_util_increment_seconds(TIME_UTIL_t *time);
     TIME_UTIL_Error_t time_util_decrement_seconds(TIME_UTIL_t *time);
     TIME_UTIL_Error_t time_util_increment_milliseconds(TIME_UTIL_t *time);
+    TIME_UTIL_Error_t time_util_add_milliseconds(TIME_UTIL_t *time, uint32_t amount);
 
     /* transforming time data*/
     TIME_UTIL_Error_t time_util_timeToString(TIME_UTIL_t *time, char *destination, uint32_t destination_len);
