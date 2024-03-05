@@ -142,26 +142,26 @@ TIME_UTIL_Error_t time_util_decrement_hours(TIME_UTIL_t *time)
  * @brief Add amount to hours
  * 
  * @param time: TIME_UTIL_t
- * @param hours: uint32_t
+ * @param amount: uint32_t
  * @return TIME_UTIL_Error_t 
  */
-TIME_UTIL_Error_t time_util_add_hours(TIME_UTIL_t *time, uint32_t hours)
+TIME_UTIL_Error_t time_util_add_hours(TIME_UTIL_t *time, uint32_t amount)
 {
     /* check if time struct is valid */
     FAIL_IF_NULL(time);
     
     // add remainder from division by HOURS_MAX to days
-    uint32_t add_days = hours % TIME_UTILS_HOURS_MAX+1;
+    uint32_t add_days = amount % TIME_UTILS_HOURS_MAX+1;
     time_util_add_days(time, add_days);
     
     // add hours
-    uint32_t add_hours = hours / TIME_UTILS_HOURS_MAX+1;
+    uint32_t add_hours = amount / TIME_UTILS_HOURS_MAX+1;
     time->hours += add_hours;
     
     // if hours theoretically overflows, correct value
     if(time->hours > TIME_UTILS_HOURS_MAX){
         time_util_increment_days(time);
-        time->hours -= 24;
+        time->hours -= TIME_UTILS_HOURS_MAX+1;
     }
     return TIME_UTIL_OK;
 }
@@ -188,6 +188,7 @@ TIME_UTIL_Error_t time_util_increment_minutes(TIME_UTIL_t *time)
     }
     return TIME_UTIL_OK;
 }
+
 // ###################################################################
 /**
  * @brief Decrement minutes.
@@ -201,12 +202,41 @@ TIME_UTIL_Error_t time_util_decrement_minutes(TIME_UTIL_t *time)
 
     if (time->minutes <= TIME_UTILS_MIN)
     {
-        time->minutes = 59;
+        time->minutes = TIME_UTILS_MINUTES_MAX;
         time_util_decrement_hours(time);
     }
     else
     {
         time->minutes--;
+    }
+    return TIME_UTIL_OK;
+}
+
+// ###################################################################
+/**
+ * @brief Add mount to minutes.
+ * 
+ * @param time: TIME_UTIL_t
+ * @param amount: uint32_t
+ * @return TIME_UTIL_Error_t 
+ */
+TIME_UTIL_Error_t time_util_add_minutes(TIME_UTIL_t *time, uint32_t amount)
+{
+    /* check if time struct is valid */
+    FAIL_IF_NULL(time);
+    
+    // add remainder from division by HOURS_MAX to days
+    uint32_t add_hours = amount % TIME_UTILS_MINUTES_MAX+1;
+    time_util_add_hours(time, add_hours);
+    
+    // add hours
+    uint32_t add_minutes = amount / TIME_UTILS_MINUTES_MAX+1;
+    time->minutes += add_minutes;
+    
+    // if hours theoretically overflows, correct value
+    if(time->minutes > TIME_UTILS_MINUTES_MAX){
+        time_util_increment_hours(time);
+        time->minutes -= TIME_UTILS_MINUTES_MAX+1;
     }
     return TIME_UTIL_OK;
 }
