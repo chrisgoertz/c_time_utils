@@ -289,6 +289,35 @@ TIME_UTIL_Error_t time_util_decrement_seconds(TIME_UTIL_t *time)
 
 // ###################################################################
 /**
+ * @brief Add amount to seconds.
+ * 
+ * @param time: TIME_UTIL_t
+ * @param amount: uint32_t
+ * @return TIME_UTIL_Error_t 
+ */
+TIME_UTIL_Error_t time_util_add_seconds(TIME_UTIL_t *time, uint32_t amount)
+{
+    /* check if time struct is valid */
+    FAIL_IF_NULL(time);
+    
+    // add remainder from division by HOURS_MAX to days
+    uint32_t add_minutes = amount % TIME_UTILS_SECONDS_MAX+1;
+    time_util_add_minutes(time, add_minutes);
+    
+    // add hours
+    uint32_t add_seconds = amount / TIME_UTILS_SECONDS_MAX+1;
+    time->minutes += add_seconds;
+    
+    // if hours theoretically overflows, correct value
+    if(time->seconds > TIME_UTILS_SECONDS_MAX){
+        time_util_increment_minutes(time);
+        time->seconds -= TIME_UTILS_SECONDS_MAX+1;
+    }
+    return TIME_UTIL_OK;
+}
+
+// ###################################################################
+/**
  * @brief Increment milliseconds.
  *
  * @param time: TIME_UTILS_t*
@@ -306,6 +335,35 @@ TIME_UTIL_Error_t time_util_increment_milliseconds(TIME_UTIL_t *time)
     {
         time->milliseconds = TIME_UTILS_MIN;
         time_util_increment_seconds(time);
+    }
+    return TIME_UTIL_OK;
+}
+
+// ###################################################################
+/**
+ * @brief Add amount to milliseconds
+ * 
+ * @param time: TIME_UTIL_t
+ * @param amount: uint32_t
+ * @return TIME_UTIL_Error_t 
+ */
+TIME_UTIL_Error_t time_util_add_milliseconds(TIME_UTIL_t *time, uint32_t amount)
+{
+    /* check if time struct is valid */
+    FAIL_IF_NULL(time);
+    
+    // add remainder from division by HOURS_MAX to days
+    uint32_t add_seconds = amount % TIME_UTILS_MILLISECONDS_MAX+1;
+    time_util_add_seconds(time, add_seconds);
+    
+    // add hours
+    uint32_t add_milliseconds = amount / TIME_UTILS_MILLISECONDS_MAX+1;
+    time->milliseconds += add_milliseconds;
+    
+    // if hours theoretically overflows, correct value
+    if(time->seconds > TIME_UTILS_MILLISECONDS_MAX){
+        time_util_increment_seconds(time);
+        time->seconds -= TIME_UTILS_MILLISECONDS_MAX+1;
     }
     return TIME_UTIL_OK;
 }
