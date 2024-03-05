@@ -225,15 +225,15 @@ TIME_UTIL_Error_t time_util_add_minutes(TIME_UTIL_t *time, uint32_t amount)
     /* check if time struct is valid */
     FAIL_IF_NULL(time);
     
-    // add remainder from division by HOURS_MAX to days
+    // add remainder from division by MINUTES_MAX to hours.
     uint32_t add_hours = amount % TIME_UTILS_MINUTES_MAX+1;
     time_util_add_hours(time, add_hours);
     
-    // add hours
+    // add minutes
     uint32_t add_minutes = amount / TIME_UTILS_MINUTES_MAX+1;
     time->minutes += add_minutes;
     
-    // if hours theoretically overflows, correct value
+    // if minutes theoretically overflows, correct value.
     if(time->minutes > TIME_UTILS_MINUTES_MAX){
         time_util_increment_hours(time);
         time->minutes -= TIME_UTILS_MINUTES_MAX+1;
@@ -300,15 +300,15 @@ TIME_UTIL_Error_t time_util_add_seconds(TIME_UTIL_t *time, uint32_t amount)
     /* check if time struct is valid */
     FAIL_IF_NULL(time);
     
-    // add remainder from division by HOURS_MAX to days
+    // add remainder from division by SECONDS_MAX to minutes.
     uint32_t add_minutes = amount % TIME_UTILS_SECONDS_MAX+1;
     time_util_add_minutes(time, add_minutes);
     
-    // add hours
+    // add seconds
     uint32_t add_seconds = amount / TIME_UTILS_SECONDS_MAX+1;
     time->minutes += add_seconds;
     
-    // if hours theoretically overflows, correct value
+    // if seconds theoretically overflows, correct value
     if(time->seconds > TIME_UTILS_SECONDS_MAX){
         time_util_increment_minutes(time);
         time->seconds -= TIME_UTILS_SECONDS_MAX+1;
@@ -352,15 +352,15 @@ TIME_UTIL_Error_t time_util_add_milliseconds(TIME_UTIL_t *time, uint32_t amount)
     /* check if time struct is valid */
     FAIL_IF_NULL(time);
     
-    // add remainder from division by HOURS_MAX to days
+    // add remainder from division by MILLISECONDS_MAX to seconds.
     uint32_t add_seconds = amount % TIME_UTILS_MILLISECONDS_MAX+1;
     time_util_add_seconds(time, add_seconds);
     
-    // add hours
+    // add milliseconds
     uint32_t add_milliseconds = amount / TIME_UTILS_MILLISECONDS_MAX+1;
     time->milliseconds += add_milliseconds;
     
-    // if hours theoretically overflows, correct value
+    // if milliseconds theoretically overflows, correct value
     if(time->seconds > TIME_UTILS_MILLISECONDS_MAX){
         time_util_increment_seconds(time);
         time->seconds -= TIME_UTILS_MILLISECONDS_MAX+1;
