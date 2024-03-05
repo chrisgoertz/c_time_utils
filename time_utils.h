@@ -77,7 +77,7 @@ extern "C"
     TIME_UTIL_Error_t time_util_set_milliseconds(TIME_UTIL_t *time, uint16_t ms);
     
 
-#ifdef __cpluplus
+#ifdef __cplusplus
 }
 #endif
 
